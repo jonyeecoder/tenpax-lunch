@@ -1,5 +1,6 @@
 import os
 import sqlite3
+MIN_PASSWORD_LENGTH = 6
 from datetime import date
 from functools import wraps
 
@@ -76,8 +77,8 @@ def signup():
             flash("Wrong team code.")
         elif count >= MAX_USERS:
             flash(f"The team is full ({MAX_USERS} people).")
-        elif not username or len(password) < 6:
-            flash("Pick a username and a password of at least 6 characters.")
+        elif not username or len(password) < MIN_PASSWORD_LENGTH:
+            flash("Pick a username and a password of at least {MIN_PASSWORD_LENGTH} characters.")
         else:
             try:
                 cur = db().execute(
@@ -91,7 +92,7 @@ def signup():
                 session.clear()
                 session["user_id"] = cur.lastrowid
                 return redirect(url_for("index"))
-    return render_template("signup.html")
+    return render_template("signup.html",min_password_length=MIN_PASSWORD_LENGTH)
 
 
 @app.route("/login", methods=["GET", "POST"])
