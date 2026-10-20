@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Lunch today <span class="muted">{{ today.strftime('%a %d %b') }}</span></h1>
+
+{% if runs %}
+  <ul class="runs">
+    {% for run in runs %}
+      <li class="card">
+        <a href="{{ url_for('show_run', run_id=run.id) }}"><strong>{{ run.place }}</strong></a>
+        <span class="muted">
+          by {{ run.organizer }}
+          {% if run.cutoff %}· order by {{ run.cutoff }}{% endif %}
+          · {{ run.order_count }} order{{ '' if run.order_count == 1 else 's' }}
+        </span>
+        {% if run.closed %}<span class="tag">closed</span>{% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="muted">No lunch runs yet today.</p>
+{% endif %}
+
+<section class="card">
+  <h2>Start a lunch run</h2>
+  <form method="post" action="{{ url_for('create_run') }}" class="row">
+    <label>Place <input name="place" placeholder="e.g. Chicken rice stall" required></label>
+    <label>Order by <input name="cutoff" type="time"></label>
+    <button>Start run</button>
+  </form>
+</section>
+{% endblock %}

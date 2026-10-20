@@ -1,0 +1,23 @@
+# Tenpax Lunch
+
+A small Flask + SQLite web app for ten coworkers to collect a day's lunch order in one place and see who has paid, instead of piecing it together from the group chat.
+
+The 4Cs problem statement, success metric and v1 scope are in [PLAN.md](PLAN.md).
+
+## How it works
+1. Coworkers join with a shared team code. The team is capped at 10 accounts.
+2. Anyone can start a **lunch run** for today: the place and an optional order cutoff time.
+3. Everyone adds or edits their order: the item and its price.
+4. The organizer sees the full list and total, ticks off who has paid, and closes orders.
+
+## Run it locally
+```bash
+python -m venv .venv
+.venv\Scripts\activate        # macOS/Linux: source .venv/bin/activate
+pip install -r requirements.txt
+copy .env.example .env        # macOS/Linux: cp .env.example .env  (then edit the values)
+flask run
+```
+Then open http://127.0.0.1:5000 and join using the `TEAM_CODE` from your `.env`.
+
+The database is a single file, `lunch.db`. It's created on first run and isn't committed.

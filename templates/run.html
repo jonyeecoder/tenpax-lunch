@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}{{ run.place }} · Tenpax Lunch{% endblock %}
+{% block content %}
+<p><a href="{{ url_for('index') }}">← Today</a></p>
+<h1>{{ run.place }} {% if run.closed %}<span class="tag">closed</span>{% endif %}</h1>
+<p class="muted">
+  Organised by {{ run.organizer }}{% if run.cutoff %} · order by {{ run.cutoff }}{% endif %}
+</p>
+
+{% if not run.closed %}
+<section class="card">
+  <h2>{{ 'Change your order' if mine else 'Your order' }}</h2>
+  <form method="post" action="{{ url_for('place_order', run_id=run.id) }}" class="row">
+    <label>Item <input name="item" value="{{ mine.item if mine else '' }}" placeholder="e.g. Roast chicken rice, no chilli" required></label>
+    <label>Price ($) <input name="price" type="number" step="0.01" min="0" value="{{ '%.2f' % (mine.price_cents / 100) if mine else '' }}" required></label>
+    <button>{{ 'Update' if mine else 'Add my order' }}</button>
+  </form>
+  {% if mine %}
+    <form method="post" action="{{ url_for('delete_order', run_id=run.id) }}">
+      <button class="link">Remove my order</button>
+    </form>
+  {% endif %}
+</section>
+{% endif %}
+
+<section class="card">
+  <h2>Orders ({{ orders|length }})</h2>
+  {% if orders %}
+  <table>
+    <thead><tr><th>Who</th><th>Item</th><th class="num">Price</th><th>Paid</th></tr></thead>
+    <tbody>
+      {% for o in orders %}
+      <tr>
+        <td>{{ o.username }}</td>
+        <td>{{ o.item }}</td>
+        <td class="num">{{ o.price_cents|money }}</td>
+        <td>
+          {% if is_organizer %}
+            <form method="post" action="{{ url_for('toggle_paid', order_id=o.id) }}">
+              <button class="chip {{ 'paid' if o.paid }}">{{ '✓ paid' if o.paid else 'unpaid' }}</button>
+            </form>
+          {% else %}
+            <span class="chip {{ 'paid' if o.paid }}">{{ '✓ paid' if o.paid else 'unpaid' }}</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr><td colspan="2">Total</td><td class="num">{{ total|money }}</td><td class="muted">{{ unpaid|money }} owed</td></tr>
+    </tfoot>
+  </table>
+  {% else %}
+    <p class="muted">No orders yet.</p>
+  {% endif %}
+</section>
+
+{% if is_organizer %}
+<form method="post" action="{{ url_for('toggle_closed', run_id=run.id) }}">
+  <button class="secondary">{{ 'Reopen orders' if run.closed else 'Close orders' }}</button>
+</form>
+{% endif %}
+{% endblock %}
