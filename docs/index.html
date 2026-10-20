@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tenpax Lunch Demo</title>
+  <meta name="description" content="A 48-second demo of Tenpax Lunch, a lunch-ordering app for 10 coworkers.">
+  <style>
+    :root { --bg: #faf7f2; --text: #222; --muted: #6b6b6b; --accent: #d9622b; --line: #e7e1d8; }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #1b1a18; --text: #eee; --muted: #a19c95; --accent: #f08a50; --line: #3a3733; }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font: 17px/1.55 system-ui, sans-serif; background: var(--bg); color: var(--text); }
+    main { max-width: 960px; margin: 0 auto; padding: 32px 16px 48px; }
+    h1 { margin: 0 0 4px; font-size: 1.9rem; }
+    p { margin: 0 0 20px; color: var(--muted); }
+    video { display: block; width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--line); background: #000; }
+    ol { padding-left: 20px; }
+    a { color: var(--accent); }
+    .links { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 24px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>🥡 Tenpax Lunch</h1>
+    <p>A lunch-ordering app for 10 coworkers: start a lunch run, everyone adds their order, and the organizer tracks the total and who has paid.</p>
+
+    <video controls playsinline preload="metadata" poster="poster.jpg">
+      <source src="demo.mp4" type="video/mp4">
+      Your browser can't play this video. <a href="demo.mp4">Download it instead</a>.
+    </video>
+
+    <h2>What the demo shows</h2>
+    <ol>
+      <li>A coworker joins with the shared team code.</li>
+      <li>They start today's lunch run and add their order.</li>
+      <li>Everyone else's orders appear in one list with the total.</li>
+      <li>The organizer ticks off who has paid and closes orders at the cutoff.</li>
+    </ol>
+
+    <div class="links">
+      <a href="https://jonyeecoder.pythonanywhere.com">Open the live app</a>
+      <a href="https://github.com/jonyeecoder/tenpax-lunch">Source code on GitHub</a>
+    </div>
+  </main>
+</body>
+</html>

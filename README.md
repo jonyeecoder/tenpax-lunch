@@ -4,6 +4,10 @@ A lunch-ordering app for 10 coworkers: start a lunch run, everyone adds their or
 
 **Live app:** https://jonyeecoder.pythonanywhere.com (joining needs the team code)
 
+**Demo video (48 s):** https://jonyeecoder.github.io/tenpax-lunch/
+
+[![Demo video](docs/poster.jpg)](https://jonyeecoder.github.io/tenpax-lunch/)
+
 Built with Flask + SQLite.
 
 The 4Cs problem statement, success metric and v1 scope are in [PLAN.md](PLAN.md).
