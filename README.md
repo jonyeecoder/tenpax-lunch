@@ -31,7 +31,7 @@ Edit `.env` first: the app refuses to start until `SECRET_KEY` is a real random 
 | Setting in `.env` | What it does |
 |---|---|
 | `SECRET_KEY` | **Required.** Signs login cookies. |
-| `TEAM_CODE` | What coworkers type to sign up. Empty closes sign-up. |
+| `TEAM_CODE` | What coworkers type to sign up. Empty closes sign-up. Use a random value and change it if it leaks; anyone with it can take one of the 10 seats. |
 | `TIMEZONE` | Your team's timezone (default `Asia/Singapore`). Decides "today" and the cutoff. |
 | `TRUST_PROXY` | `1` on PythonAnywhere, so login rate limits see each visitor's real IP. |
 | `COOKIE_SECURE` | Cookies are HTTPS-only by default. Set `0` only to test over plain HTTP from another device. |

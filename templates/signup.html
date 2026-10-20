@@ -6,7 +6,7 @@
   <h1>Join the team</h1>
   <form method="post">
     {{ m.csrf() }}
-    <label>Team code <input name="team_code" required autofocus></label>
+    <label>Team code <input name="team_code" type="password" autocomplete="off" required autofocus></label>
     <label>Username <input name="username" maxlength="{{ max_username_length }}" required></label>
     <label>Password <input name="password" type="password" minlength="{{ min_password_length }}" required></label>
     <button type="submit">Create account</button>
