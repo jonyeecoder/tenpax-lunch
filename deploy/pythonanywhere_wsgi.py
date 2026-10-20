@@ -6,4 +6,6 @@ path = "/home/YOUR_USERNAME/tenpax-lunch"
 if path not in sys.path:
     sys.path.insert(0, path)
 
-from app import app as application  # noqa: E402,F401
+from app import create_app  # noqa: E402 (needs the sys.path line above)
+
+application = create_app()

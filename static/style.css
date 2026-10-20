@@ -6,6 +6,8 @@
   --accent: #d9622b;
   --ok: #2e8b57;
   --line: #e7e1d8;
+  --flash-bg: #fff3cd;
+  --flash-text: #5c4400;
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -16,6 +18,8 @@
     --accent: #f08a50;
     --ok: #5cc28a;
     --line: #3a3733;
+    --flash-bg: #3d3214;
+    --flash-text: #f3dc9a;
   }
 }
 
@@ -78,7 +82,7 @@ button {
 button.secondary { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
 button.link { background: none; color: var(--accent); padding: 0; text-decoration: underline; }
 
-.flash { background: #fff3cd; color: #5c4400; padding: 10px 14px; border-radius: 6px; }
+.flash { background: var(--flash-bg); color: var(--flash-text); padding: 10px 14px; border-radius: 6px; }
 .tag { font-size: 0.75rem; padding: 2px 8px; border-radius: 99px; background: var(--line); color: var(--muted); }
 .chip {
   display: inline-block;

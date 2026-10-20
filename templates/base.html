@@ -1,18 +1,20 @@
+{% import "_macros.html" as m with context -%}
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}Tenpax Lunch{% endblock %}</title>
+  <title>{{ title ~ ' · ' if title }}Tenpax Lunch</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
   <header>
-    <a class="brand" href="{{ url_for('index') }}">🥡 Tenpax Lunch</a>
+    <a class="brand" href="{{ url_for('lunch.index') }}">🥡 Tenpax Lunch</a>
     {% if g.user %}
-      <form method="post" action="{{ url_for('logout') }}">
+      <form method="post" action="{{ url_for('lunch.logout') }}">
+        {{ m.csrf() }}
         <span>{{ g.user.username }}</span>
-        <button class="link">Log out</button>
+        <button type="submit" class="link">Log out</button>
       </form>
     {% endif %}
   </header>

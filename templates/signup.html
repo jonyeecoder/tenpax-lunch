@@ -1,14 +1,16 @@
 {% extends "base.html" %}
-{% block title %}Join · Tenpax Lunch{% endblock %}
+{% import "_macros.html" as m with context %}
+{% set title = "Join" %}
 {% block content %}
 <section class="card narrow">
   <h1>Join the team</h1>
   <form method="post">
+    {{ m.csrf() }}
     <label>Team code <input name="team_code" required autofocus></label>
-    <label>Username <input name="username" required></label>
-    <label>Password <input name="password" type="password" minlength="6" required></label>
-    <button>Create account</button>
+    <label>Username <input name="username" maxlength="{{ max_username_length }}" required></label>
+    <label>Password <input name="password" type="password" minlength="{{ min_password_length }}" required></label>
+    <button type="submit">Create account</button>
   </form>
-  <p class="muted">Already have an account? <a href="{{ url_for('login') }}">Log in</a></p>
+  <p class="muted">Already have an account? <a href="{{ url_for('lunch.login') }}">Log in</a></p>
 </section>
 {% endblock %}

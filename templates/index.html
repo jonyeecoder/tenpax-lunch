@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% import "_macros.html" as m with context %}
 {% block content %}
 <h1>Lunch today <span class="muted">{{ today.strftime('%a %d %b') }}</span></h1>
 
@@ -6,13 +7,12 @@
   <ul class="runs">
     {% for run in runs %}
       <li class="card">
-        <a href="{{ url_for('show_run', run_id=run.id) }}"><strong>{{ run.place }}</strong></a>
+        <a href="{{ url_for('lunch.show_run', run_id=run.id) }}"><strong>{{ run.place }}</strong></a>
         <span class="muted">
-          by {{ run.organizer }}
-          {% if run.cutoff %}· order by {{ run.cutoff }}{% endif %}
+          by {{ run.organizer }}{{ m.cutoff_note(run) }}
           · {{ run.order_count }} order{{ '' if run.order_count == 1 else 's' }}
         </span>
-        {% if run.closed %}<span class="tag">closed</span>{% endif %}
+        {{ m.status_tag(run.closed_reason) }}
       </li>
     {% endfor %}
   </ul>
@@ -22,10 +22,11 @@
 
 <section class="card">
   <h2>Start a lunch run</h2>
-  <form method="post" action="{{ url_for('create_run') }}" class="row">
-    <label>Place <input name="place" placeholder="e.g. Chicken rice stall" required></label>
+  <form method="post" action="{{ url_for('lunch.create_run') }}" class="row">
+    {{ m.csrf() }}
+    <label>Place <input name="place" maxlength="{{ max_text_length }}" placeholder="e.g. Chicken rice stall" required></label>
     <label>Order by <input name="cutoff" type="time"></label>
-    <button>Start run</button>
+    <button type="submit">Start run</button>
   </form>
 </section>
 {% endblock %}

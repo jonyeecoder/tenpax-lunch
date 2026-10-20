@@ -22,3 +22,12 @@ CREATE TABLE IF NOT EXISTS orders (
     paid INTEGER NOT NULL DEFAULT 0,
     UNIQUE (run_id, user_id)
 );
+
+CREATE TABLE IF NOT EXISTS failed_logins (
+    id INTEGER PRIMARY KEY,
+    ip TEXT NOT NULL,
+    username TEXT,
+    at TEXT NOT NULL -- UTC, ISO 8601
+);
+
+CREATE INDEX IF NOT EXISTS failed_logins_at ON failed_logins (at);

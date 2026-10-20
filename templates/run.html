@@ -1,30 +1,31 @@
 {% extends "base.html" %}
-{% block title %}{{ run.place }} · Tenpax Lunch{% endblock %}
+{% import "_macros.html" as m with context %}
+{% set title = run.place %}
 {% block content %}
-<p><a href="{{ url_for('index') }}">← Today</a></p>
-<h1>{{ run.place }} {% if run.closed %}<span class="tag">closed</span>{% endif %}</h1>
-<p class="muted">
-  Organised by {{ run.organizer }}{% if run.cutoff %} · order by {{ run.cutoff }}{% endif %}
-</p>
+<p><a href="{{ url_for('lunch.index') }}">← Today</a></p>
+<h1>{{ run.place }} {{ m.status_tag(closed_reason) }}</h1>
+<p class="muted">Organised by {{ run.organizer }}{{ m.cutoff_note(run) }}</p>
 
-{% if not run.closed %}
+{% if not closed_reason %}
 <section class="card">
   <h2>{{ 'Change your order' if mine else 'Your order' }}</h2>
-  <form method="post" action="{{ url_for('place_order', run_id=run.id) }}" class="row">
-    <label>Item <input name="item" value="{{ mine.item if mine else '' }}" placeholder="e.g. Roast chicken rice, no chilli" required></label>
-    <label>Price ($) <input name="price" type="number" step="0.01" min="0" value="{{ '%.2f' % (mine.price_cents / 100) if mine else '' }}" required></label>
-    <button>{{ 'Update' if mine else 'Add my order' }}</button>
+  <form method="post" action="{{ url_for('lunch.place_order', run_id=run.id) }}" class="row">
+    {{ m.csrf() }}
+    <label>Item <input name="item" maxlength="{{ max_text_length }}" value="{{ mine.item if mine else '' }}" placeholder="e.g. Roast chicken rice, no chilli" required></label>
+    <label>Price ($) <input name="price" type="number" step="0.01" min="0" max="1000" value="{{ mine.price_cents | dollars if mine else '' }}" required></label>
+    <button type="submit">{{ 'Update' if mine else 'Add my order' }}</button>
   </form>
   {% if mine %}
-    <form method="post" action="{{ url_for('delete_order', run_id=run.id) }}">
-      <button class="link">Remove my order</button>
+    <form method="post" action="{{ url_for('lunch.delete_order', run_id=run.id) }}">
+      {{ m.csrf() }}
+      <button type="submit" class="link">Remove my order</button>
     </form>
   {% endif %}
 </section>
 {% endif %}
 
 <section class="card">
-  <h2>Orders ({{ orders|length }})</h2>
+  <h2>Orders ({{ orders | length }})</h2>
   {% if orders %}
   <table>
     <thead><tr><th>Who</th><th>Item</th><th class="num">Price</th><th>Paid</th></tr></thead>
@@ -33,21 +34,13 @@
       <tr>
         <td>{{ o.username }}</td>
         <td>{{ o.item }}</td>
-        <td class="num">{{ o.price_cents|money }}</td>
-        <td>
-          {% if is_organizer %}
-            <form method="post" action="{{ url_for('toggle_paid', order_id=o.id) }}">
-              <button class="chip {{ 'paid' if o.paid }}">{{ '✓ paid' if o.paid else 'unpaid' }}</button>
-            </form>
-          {% else %}
-            <span class="chip {{ 'paid' if o.paid }}">{{ '✓ paid' if o.paid else 'unpaid' }}</span>
-          {% endif %}
-        </td>
+        <td class="num">{{ o.price_cents | money }}</td>
+        <td>{{ m.paid_chip(o, as_button=is_organizer) }}</td>
       </tr>
       {% endfor %}
     </tbody>
     <tfoot>
-      <tr><td colspan="2">Total</td><td class="num">{{ total|money }}</td><td class="muted">{{ unpaid|money }} owed</td></tr>
+      <tr><td colspan="2">Total</td><td class="num">{{ total | money }}</td><td class="muted">{{ unpaid | money }} owed</td></tr>
     </tfoot>
   </table>
   {% else %}
@@ -56,8 +49,10 @@
 </section>
 
 {% if is_organizer %}
-<form method="post" action="{{ url_for('toggle_closed', run_id=run.id) }}">
-  <button class="secondary">{{ 'Reopen orders' if run.closed else 'Close orders' }}</button>
+<form method="post" action="{{ url_for('lunch.set_closed', run_id=run.id) }}">
+  {{ m.csrf() }}
+  <input type="hidden" name="closed" value="{{ 0 if run.closed else 1 }}">
+  <button type="submit" class="secondary">{{ 'Reopen orders' if run.closed else 'Close orders' }}</button>
 </form>
 {% endif %}
 {% endblock %}

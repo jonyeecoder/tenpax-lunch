@@ -1,0 +1,25 @@
+{% macro csrf() -%}
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+{%- endmacro %}
+
+{% macro cutoff_note(run) -%}
+  {% if run.cutoff %} · order by {{ run.cutoff }}{% endif %}
+{%- endmacro %}
+
+{% macro status_tag(reason) -%}
+  {% if reason %}<span class="tag">{{ reason }}</span>{% endif %}
+{%- endmacro %}
+
+{% macro paid_chip(order, as_button=false) -%}
+  {%- set label = '✓ paid' if order.paid else 'unpaid' -%}
+  {%- set classes = 'chip paid' if order.paid else 'chip' -%}
+  {% if as_button %}
+    <form method="post" action="{{ url_for('lunch.set_paid', order_id=order.id) }}">
+      {{ csrf() }}
+      <input type="hidden" name="paid" value="{{ 0 if order.paid else 1 }}">
+      <button type="submit" class="{{ classes }}">{{ label }}</button>
+    </form>
+  {% else %}
+    <span class="{{ classes }}">{{ label }}</span>
+  {% endif %}
+{%- endmacro %}

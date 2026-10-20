@@ -11,13 +11,16 @@ echo "Creating virtualenv with $PYTHON..."
 .venv/bin/pip install -q -r requirements.txt
 
 if [ ! -f .env ]; then
-  read -rp "Choose a team code to share with your coworkers: " team_code
+  team_code="$("$PYTHON" -c 'import secrets; print(secrets.token_urlsafe(9))')"
   {
     echo "SECRET_KEY=$("$PYTHON" -c 'import secrets; print(secrets.token_hex(32))')"
     echo "TEAM_CODE=$team_code"
+    echo "TIMEZONE=${TIMEZONE:-Asia/Singapore}"
+    echo "TRUST_PROXY=1"
   } > .env
   chmod 600 .env
-  echo "Wrote .env"
+  echo "Wrote .env. Your team code is: $team_code"
+  echo "(Share it with your coworkers. It's also saved in .env.)"
 else
   echo ".env already exists, leaving it alone"
 fi
