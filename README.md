@@ -1,6 +1,10 @@
 # Tenpax Lunch
 
-A small Flask + SQLite web app for ten coworkers to collect a day's lunch order in one place and see who has paid, instead of piecing it together from the group chat.
+A lunch-ordering app for 10 coworkers: start a lunch run, everyone adds their order, and the organizer sees the total and who has paid. No more scrolling the group chat.
+
+**Live app:** https://jonyeecoder.pythonanywhere.com (joining needs the team code)
+
+Built with Flask + SQLite.
 
 The 4Cs problem statement, success metric and v1 scope are in [PLAN.md](PLAN.md).
 
