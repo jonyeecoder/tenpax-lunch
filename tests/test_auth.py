@@ -18,6 +18,11 @@ def test_login_and_signup_pages_render(client):
     assert "Join · Tenpax Lunch" in page(client, "/signup")
 
 
+def test_team_code_field_is_masked(client):
+    # issue #21: a plain text field leaks the code in screen shares and autofill
+    assert '<input name="team_code" type="password" autocomplete="off"' in page(client, "/signup")
+
+
 def test_signup_logs_you_in(client):
     resp = signup(client)
     assert resp.headers["Location"] == "/"
